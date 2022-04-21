@@ -1,25 +1,23 @@
-package clashRoyale;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
 public class Tour extends Jouable {
-	int[] basic_coords = new int[2]; //permet de garder en mémoire la position de la tour avant qu'elle meurt
+	int[] basic_coords = new int[2]; //permet de garder en mÃ©moire la position de la tour avant qu'elle meurt
 	
 	Tour(boolean principale, boolean player, boolean haut){
-		super(3000,3000,10,10,50,250,true,true,false,500, false);  //int vie, int VieInit, int x1, int y1, int damage, int p, boolean tir_air, boolean tir_sol, boolean en_air, int fréquence, boolean play
+		super(3000,3000,10,10,50,250,true,true,false,500, true);  //int vie, int VieInit, int x1, int y1, int damage, int p, boolean tir_air, boolean tir_sol, boolean en_air, int frÃ©quence, boolean play
 		if(principale) {
 			this.pv = 4000;
 			this.pvInit = 4000;
-			if(player) {  //true pour celui avec les commandes à gauche
+			if(player) {  //true pour celui avec les commandes Ã  gauche
 				x = UNIT_SIZE*20+CARD_WIDTH;
 				y = UNIT_SIZE*40;
 				basic_coords[0] = x;
 				basic_coords[1] = y;
 			}else {
-				x = 150*UNIT_SIZE+CARD_WIDTH;
-				y = 30*UNIT_SIZE;
+				x = 130*UNIT_SIZE+CARD_WIDTH;
+				y = 40*UNIT_SIZE;
 				basic_coords[0] = x;
 				basic_coords[1] = y;
 			}
@@ -39,12 +37,12 @@ public class Tour extends Jouable {
 			}else {
 				if(haut) {
 					x=120*UNIT_SIZE+CARD_WIDTH;
-					y=15*UNIT_SIZE;
+					y=13*UNIT_SIZE;
 					basic_coords[0] = x;
 					basic_coords[1] = y;
 				}else {
-					x=125*UNIT_SIZE+CARD_WIDTH;
-					y=81*UNIT_SIZE;
+					x=120*UNIT_SIZE+CARD_WIDTH;
+					y=60*UNIT_SIZE;
 					basic_coords[0] = x;
 					basic_coords[1] = y;
 				}
@@ -53,13 +51,20 @@ public class Tour extends Jouable {
 	}
 	
 	public void move() {
-		//constitue juste un déplacement des coordonnées vers la tour principale quand la tour est morte
+		//constitue juste un dÃ©placement des coordonnÃ©es vers la tour principale quand la tour est morte
 		this.x = 1200;
 		this.y = 350;
 	}
 	
 	public void draw(Graphics g) {
-		//en inversé car on représente que les restes de la tour
+		//barres de vie
+		g.setColor(Color.black);
+        g.fillRect( this.x,  this.y-10 , 127, 10);
+        if(this.which_player==true){
+            g.setColor(Color.blue);
+        } else{ g.setColor(Color.red);}
+        g.fillRect( this.x+1 ,  this.y-9 , (125*this.pv)/this.pvInit, 8);
+      //en inversÃ© car on reprÃ©sente que les restes de la tour
 		if(this.pv <= 0) {
 			g.setColor(Color.BLACK);
 			g.fillRect(basic_coords[0], basic_coords[1], 80, 80);
@@ -78,14 +83,21 @@ public class Tour extends Jouable {
 		}
 	}
 	public void brain() {
-		
+		if(!(cible == null)) {
+			double r = Math.sqrt(Math.pow(cible.x-this.x, 2)+Math.pow(cible.y-this.y, 2));
+	        System.out.println("le r vaut: "+ r);
+	        if(r<=this.portÃ©e) {
+	            //la tour est capable de tirer
+	            this.tir(cible);
+	        }
+		}
 	}
 	
 	public String toString() {
-		return "je suis une tour, mes coordonées : " + this.x +", " +this.y;
+		return "je suis une tour, mes coordonÃ©es : " + this.x +", " +this.y;
 	}
 	public void meurt(LinkedList<Jouable> list_tours) {
-		//ses coordonnées passent sur la tour principale
+		//ses coordonnÃ©es passent sur la tour principale
 		this.x = list_tours.get(2).x;
 		this.y = list_tours.get(2).y;
 	}
