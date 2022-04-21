@@ -1,5 +1,3 @@
-package clashRoyale;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -15,7 +13,7 @@ public class GamePanel extends JPanel implements ActionListener {
 	static final int CARD_WIDTH = 312;
 	static final int SCREEN_WIDTH = MAP_WIDTH +2*CARD_WIDTH;
 	static final int SCREEN_HIGHT = 740;
-	static final int UNIT_SIZE = 8;  //taille des petits carrés, il faut que SCREEN_WIDTH et SCREEN_HEIgth soient divisibles par ce chiffre. 
+	static final int UNIT_SIZE = 8;  //taille des petits carrÃ©s, il faut que SCREEN_WIDTH et SCREEN_HEIgth soient divisibles par ce chiffre. 
 	static final int GAME_UNITS = (SCREEN_WIDTH*SCREEN_HIGHT)/UNIT_SIZE;
 	static final int DELAY = 100;  //il faut que 1000 % DELAY = 0;
 	
@@ -26,12 +24,12 @@ public class GamePanel extends JPanel implements ActionListener {
 	//variables gestion de l'elixir
 	//int rechargeElixir = 0;*/
 	
-	//variables fond d'écran
+	//variables fond d'Ã©cran
 	private ImageIcon icoFond;
 	private Image imgFond;
 	
 	//personnages joueur 1
-	public Sorcier s1_1 = new Sorcier(80,80);  //les coordonnées sont prises par rapport au terrain
+	public Sorcier s1_1 = new Sorcier(80,80);  //les coordonnÃ©es sont prises par rapport au terrain
 	public Bomber b1 = new Bomber(80,80);   //donc si x=80, il faut 80 sur le terrain
 	public Geant g1 = new Geant(80,80);     //donc sa vraie valeur est 80+ CARD_WIDTH
 	public Cochon c1 = new Cochon(80,80);
@@ -66,32 +64,32 @@ public class GamePanel extends JPanel implements ActionListener {
 	LinkedList<Jouable> inGame2;
 	
 	//listes des tours de chaque joueur
-	LinkedList<Jouable> towers1; //trois élément : 0.petite tour du haut, 1. petite tour du bas
+	LinkedList<Jouable> towers1; //trois Ã©lÃ©ment : 0.petite tour du haut, 1. petite tour du bas
 	LinkedList<Jouable> towers2;     //2. petite tour du bas
 	
 	//Listes pour l'affichage/selection des cartes
 	LinkedList<Jouable> listOrdreCartes1 = new LinkedList<Jouable>();
 	LinkedList<Jouable> listOrdreCartes2 = new LinkedList<Jouable>();
 	
-	//réserves d'élixir
+	//rÃ©serves d'Ã©lixir
 	int elixir1 = 10;
 	int elixir2 = 10;
 	BarreElixir barre1 = new BarreElixir(10,10, true, 0, (SCREEN_HIGHT-20),20, (CARD_WIDTH)/3);
 	BarreElixir barre2 = new BarreElixir(10,10, false, SCREEN_WIDTH - 2*CARD_WIDTH, (SCREEN_HIGHT-20),20, (CARD_WIDTH)/3);  //Mettre de meilleures dimensions
 	int recharge = 0;  //on veut recharger toutes les sencondes
 	
-	//variables pour les fréquences de tir et les vitesses
+	//variables pour les frÃ©quences de tir et les vitesses
 	int temps = 0;
 	
 	
 	//insbratej
 	//Remplissage des LinkedList
-	//apparement ça marche que dans le action performed
+	//apparement Ã§a marche que dans le action performed
 	
 	GamePanel(){
-		this.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HIGHT)); //nombre total de carrés
+		this.setPreferredSize(new Dimension(SCREEN_WIDTH,SCREEN_HIGHT)); //nombre total de carrÃ©s
 		//this.setBackground(Color.white);
-		icoFond = new ImageIcon(getClass().getResource("/images/arène1.png"));
+		icoFond = new ImageIcon(getClass().getResource("/images/arÃ¨ne1.png"));
 		this.imgFond = this.icoFond.getImage();
 		this.setFocusable(true);
 		this.addKeyListener(new MyKeyAdapter());
@@ -101,7 +99,7 @@ public class GamePanel extends JPanel implements ActionListener {
 		
 		//listes des tours de chaque joueur
 		//perso 1
-		towers1 = new LinkedList<Jouable>(); //trois élément : 0.petite tour du haut, 1. petite tour du bas  2. petite tour du bas
+		towers1 = new LinkedList<Jouable>(); //trois Ã©lÃ©ment : 0.petite tour du haut, 1. petite tour du bas  2. petite tour du bas
 		towers1.add(0,t1_1);
 		towers1.add(1,t1_2);
 		towers1.add(2,t1_3);
@@ -110,6 +108,9 @@ public class GamePanel extends JPanel implements ActionListener {
 		towers2.add(0,t2_1);
 		towers2.add(1,t2_2);
 		towers2.add(2,t2_3);
+		t2_1.which_player = false;
+		t2_2.which_player = false;
+		t2_3.which_player = false;
 		
 		//liste de l'ordre des cartes pour la gestion des cartes
 		//perso 1
@@ -171,7 +172,7 @@ public class GamePanel extends JPanel implements ActionListener {
 				tower.draw(g);
 			}
 		}
-		//vérifie si la partie est terminée
+		//vÃ©rifie si la partie est terminÃ©e
 		if(!towers2.get(2).checkLife()) {
 			gameOver(g);
 		}
@@ -221,9 +222,9 @@ public class GamePanel extends JPanel implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(running) { //je ne comprends pas cette partie mais c'est celle qui fait que ces méthodes s'appliquent
+		if(running) { //je ne comprends pas cette partie mais c'est celle qui fait que ces mÃ©thodes s'appliquent
 			//System.out.print(sens_s1 +" mem :  "+ mem +"  ");
-	        // à chaque intervalle de temps DELAY
+	        // Ã  chaque intervalle de temps DELAY
 			
 			for(Jouable perso: inGame1) {
 				perso.radar(inGame2, towers2);
@@ -261,7 +262,7 @@ public class GamePanel extends JPanel implements ActionListener {
 			}
 			
 		}
-		recharge = recharge + DELAY;   //recharge d'élixir
+		recharge = recharge + DELAY;   //recharge d'Ã©lixir
 		if(recharge % 2000 == 0) {
 			if(elixir1 < 10) {
 				elixir1 = elixir1 + 1;
@@ -308,7 +309,7 @@ public class GamePanel extends JPanel implements ActionListener {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			switch(e.getKeyCode()) {
-			//touches de sélection de ordre 1 (joueur à gauche)
+			//touches de sÃ©lection de ordre 1 (joueur Ã  gauche)
 			case KeyEvent.VK_1:
 				ordre1 = 0;
 				break;
@@ -321,8 +322,8 @@ public class GamePanel extends JPanel implements ActionListener {
 			case KeyEvent.VK_4:
 				ordre1 = 3;
 				break;
-			//touches de spoan_localisation pour le joueur à gauche
-			case KeyEvent.VK_A:  //nom des flèches sur le clavier
+			//touches de spoan_localisation pour le joueur Ã  gauche
+			case KeyEvent.VK_A:  //nom des flÃ¨ches sur le clavier
 				listOrdreCartes1.get(ordre1).x = CARD_WIDTH + 1*MAP_WIDTH/6;
 				listOrdreCartes1.get(ordre1).y = 1*(SCREEN_HIGHT -120)/3;
 				spoan1(ordre1);
@@ -342,7 +343,7 @@ public class GamePanel extends JPanel implements ActionListener {
 				listOrdreCartes1.get(ordre1).y = 1*(SCREEN_HIGHT -120)/3;
 				spoan1(ordre1);
 				break;
-			case KeyEvent.VK_S:  //nom des flèches sur le clavier
+			case KeyEvent.VK_S:  //nom des flÃ¨ches sur le clavier
 				listOrdreCartes1.get(ordre1).x = CARD_WIDTH + 2*MAP_WIDTH/6;
 				listOrdreCartes1.get(ordre1).y = 2*(SCREEN_HIGHT -120)/3;
 				spoan1(ordre1);
@@ -367,7 +368,7 @@ public class GamePanel extends JPanel implements ActionListener {
 				listOrdreCartes1.get(ordre1).y = 3*(SCREEN_HIGHT -120)/3;
 				spoan1(ordre1);
 				break;
-			//touches de sélection de ordre2 (joueur à droite)
+			//touches de sÃ©lection de ordre2 (joueur Ã  droite)
 			case KeyEvent.VK_7:
 				ordre2 = 0;
 				break;
@@ -382,8 +383,8 @@ public class GamePanel extends JPanel implements ActionListener {
 			case KeyEvent.VK_0:
 				ordre2 = 3;
 				break;
-			//touches de spoan localisation pour le joueur à droite
-			case KeyEvent.VK_Y:  //nom des flèches sur le clavier
+			//touches de spoan localisation pour le joueur Ã  droite
+			case KeyEvent.VK_Y:  //nom des flÃ¨ches sur le clavier
 				listOrdreCartes2.get(ordre2).x = CARD_WIDTH + 4*MAP_WIDTH/6;
 				listOrdreCartes2.get(ordre2).y = 1*(SCREEN_HIGHT -120)/3;
 				spoan2(ordre2);
