@@ -18,6 +18,7 @@ public class Projectile {
     private Image imgFond;
     private ImageIcon icoFond2;
     private Image imgFond2;
+    public boolean fleche;
 
 
     public Projectile(int xBdf, int yBdf, int vitesse, boolean BouleDeFeu){
@@ -30,7 +31,7 @@ public class Projectile {
     public void drawBdf(Graphics g){
 
         if(this.BouleDeFeu){
-            //on dessine la boule de feu à partir du coeur
+            //on dessine la boule de feu Ã  partir du coeur
             g.setColor(Color.white);
             //centre
             g.fillRect(this.xBdf, this.yBdf, UNIT_SIZE, UNIT_SIZE);
@@ -87,49 +88,64 @@ public class Projectile {
             g.fillRect(this.xBdf -3*UNIT_SIZE, this.yBdf -5*UNIT_SIZE, UNIT_SIZE, UNIT_SIZE);
             g.fillRect(this.xBdf -4*UNIT_SIZE, this.yBdf -3*UNIT_SIZE, UNIT_SIZE, UNIT_SIZE);
         }
-        else if(this.BouleDeFeu= false){
-            if(sens==1){
+        else if(this.BouleDeFeu== false){
+            if(fleche){
                 icoFond = new ImageIcon(getClass().getResource("/images/fleche_droite.png"));
                 this.imgFond = this.icoFond.getImage();
                 g.drawImage(this.imgFond, xBdf, yBdf, 132, 157, null);
             }
-            else if(sens==2){
+            else if(!fleche){
                 icoFond = new ImageIcon(getClass().getResource("/images/fleche_gauche.png"));
-                this.imgFond = this.icoFond.getImage();
-                g.drawImage(this.imgFond, xBdf, yBdf, 132, 157, null);
-            }
-            else if(sens==3){
-                icoFond = new ImageIcon(getClass().getResource("/images/fleche_bas.png"));
-                this.imgFond = this.icoFond.getImage();
-                g.drawImage(this.imgFond, xBdf, yBdf, 132, 157, null);
-            }
-            else if(sens==4) {
-                icoFond = new ImageIcon(getClass().getResource("/images/fleche_haut.png"));
                 this.imgFond = this.icoFond.getImage();
                 g.drawImage(this.imgFond, xBdf, yBdf, 132, 157, null);
             }
         }
     }
 
-    public void Brain(Jouable perso, Jouable cible){  //perso : le sorcier, celui qui tire, cible : vers qui va la boule de feu
-        if(this.xBdf- perso.x<0){
+    public void Brain(Jouable cible, Jouable perso){  //perso : le sorcier, celui qui tire, cible : vers qui va la boule de feu
+        if(cible.x- perso.x<0){
             sens=1;
-            this.xBdf=this.xBdf-vitesse*UNIT_SIZE;
-        }else if(this.xBdf- perso.x>0){
+            this.xBdf=this.xBdf-vitesse;
+            if(this.xBdf < cible.x) {
+            	this.xBdf = cible.x;
+            }
+            fleche = false;
+        }else if(cible.x- perso.x>0){
             sens=2;
-            this.xBdf=this.xBdf+vitesse*UNIT_SIZE;
+            this.xBdf=this.xBdf+vitesse;
+            if(this.xBdf > cible.x) {
+            	this.xBdf = cible.x;
+            }
+            fleche = true;
         }
 
-        if(this.yBdf- perso.y<0){
+        if(cible.y- perso.y<0){
             sens=4;
-            this.yBdf=this.yBdf-vitesse*UNIT_SIZE;
-        }else if(this.yBdf- perso.y>0){
+            this.yBdf=this.yBdf-vitesse;
+            if(this.yBdf < cible.y) {
+            	this.yBdf = cible.y;
+            }
+        }else if(cible.y- perso.y>0){
             sens=3;
-            this.yBdf=this.yBdf+vitesse*UNIT_SIZE;
+            this.yBdf=this.yBdf+vitesse;
+            if(this.yBdf > cible.y) {
+            	this.yBdf = cible.y;
+            }
         }
+        if(this.xBdf >= cible.x - 3*UNIT_SIZE && this.xBdf <= cible.x + 3*UNIT_SIZE && this.yBdf >= cible.y - 3*UNIT_SIZE && this.yBdf <= cible.y + 3*UNIT_SIZE) {
+        	if(perso.recadre_proj) {
+        		this.xBdf = perso.x+65;
+            	this.yBdf = perso.y+65;
+        	}else {
+        		this.xBdf = perso.x;
+        		this.yBdf = perso.y;
+        	}
+        }
+        
 
     }
 
 
 }
+
 
