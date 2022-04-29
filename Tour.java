@@ -1,12 +1,21 @@
+package clashRoyale;
+
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.util.LinkedList;
+
+import javax.swing.ImageIcon;
 
 public class Tour extends Jouable {
 	int[] basic_coords = new int[2]; //permet de garder en mémoire la position de la tour avant qu'elle meurt
+	private ImageIcon icoFond;
+	private Image imgFond;
+	public Projectile Bdf = new Projectile(100,100,3*UNIT_SIZE/2,false); //int xBdf, int yBdf, int vitesse, boolean BouleDeFeu
+	int sens=1;
 	
 	Tour(boolean principale, boolean player, boolean haut){
-		super(3000,3000,10,10,50,250,true,true,false,500, true);  //int vie, int VieInit, int x1, int y1, int damage, int p, boolean tir_air, boolean tir_sol, boolean en_air, int fréquence, boolean play
+		super(3000,3000,10,10,50,150,true,true,false,500, true);  //int vie, int VieInit, int x1, int y1, int damage, int p, boolean tir_air, boolean tir_sol, boolean en_air, int fréquence, boolean play
 		if(principale) {
 			this.pv = 4000;
 			this.pvInit = 4000;
@@ -48,6 +57,9 @@ public class Tour extends Jouable {
 				}
 			}
 		}
+		Bdf.xBdf = this.x;
+		Bdf.yBdf = this.y;
+		recadre_proj = false;
 	}
 	
 	public void move() {
@@ -66,9 +78,18 @@ public class Tour extends Jouable {
         g.fillRect( this.x+1 ,  this.y-9 , (125*this.pv)/this.pvInit, 8);
       //en inversé car on représente que les restes de la tour
 		if(this.pv <= 0) {
-			g.setColor(Color.BLACK);
-			g.fillRect(basic_coords[0], basic_coords[1], 80, 80);
+			//g.fillRect(basic_coords[0], basic_coords[1], 80, 80);
+			icoFond = new ImageIcon(getClass().getResource("/images/tourcotedetruite.png"));
+            this.imgFond = this.icoFond.getImage();
+            g.drawImage(this.imgFond, basic_coords[0], basic_coords[1], 120, 120, null);
 		}
+		//boules de feu
+		if(this.sens ==0) {
+			if(cible.pv > 0) {
+				Bdf.drawBdf(g);
+			}
+		}
+		
 	}
 	
 	public void radar(LinkedList<Jouable> list_perso, LinkedList<Jouable> list_tours) {
@@ -89,6 +110,10 @@ public class Tour extends Jouable {
 	        if(r<=this.portée) {
 	            //la tour est capable de tirer
 	            this.tir(cible);
+	            Bdf.Brain(cible,this);
+	            this.sens = 0;
+	        }else {
+	        	this.sens = 1;
 	        }
 		}
 	}
