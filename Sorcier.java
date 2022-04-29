@@ -14,19 +14,24 @@ public class Sorcier extends Jouable {
 	private Image imgFond;
 	private ImageIcon icoFond2;
 	private Image imgFond2;
+	public Projectile Bdf = new Projectile(100,100,3*UNIT_SIZE/2,true);
+	int corr=0;
 	
-	Sorcier(int x1,int y1){       //pour la portée, on prend ((int) val_clashroyale/2)*10*UNIT_SIZE
-		super(792,792,x1, y1,309,30*UNIT_SIZE,true,true,false, 1400, true);  //int vie, int VieInit, int x1, int y1, int damage, int p, boolean tir_air, boolean tir_sol, boolean en_air, int fréquence, boolean play
-		this.setPreferredSize(new Dimension(80,40)); //nombre total de carrés
+	Sorcier(int x1,int y1){       //pour la portÃ©e, on prend ((int) val_clashroyale/2)*10*UNIT_SIZE
+		super(792,792,x1, y1,309,30*UNIT_SIZE,true,true,false, 1400, true);  //int vie, int VieInit, int x1, int y1, int damage, int p, boolean tir_air, boolean tir_sol, boolean en_air, int frÃ©quence, boolean play
+		this.setPreferredSize(new Dimension(80,40)); //nombre total de carrÃ©s
 		//this.setBackground(Color.white);
 		this.setFocusable(true);
 		this.elixir = 5;
+		Bdf.xBdf = this.x;
+		Bdf.yBdf = this.y;
+		recadre_proj = true;
 	}
 	
 	public void radar(LinkedList<Jouable> list_perso, LinkedList<Jouable> list_tours) {
-		//cette méthode détermine où est le jouable le plus proche
+		//cette mÃ©thode dÃ©termine oÃ¹ est le jouable le plus proche
 		double r = 2000;
-		//on commence par déterminer la tour la plus proche
+		//on commence par dÃ©terminer la tour la plus proche
 		if (y < 360) {
 			//si le perso est sur la partie haute du terrain
 			if(list_tours.get(0).x != list_tours.get(2).x) {
@@ -48,7 +53,7 @@ public class Sorcier extends Jouable {
 				cible = list_tours.get(2);
 			}
 		}
-		//puis on détermine le joueur le plus proche si il y en a un
+		//puis on dÃ©termine le joueur le plus proche si il y en a un
 		for(Jouable perso : list_perso) {
 			double rp = Math.sqrt(Math.pow(perso.x -this.x,2)+Math.pow(perso.y -this.y,2));
 			if(rp<=r) {
@@ -63,9 +68,9 @@ public class Sorcier extends Jouable {
 	
 	public void brain() {
 		//A PRIORI ELLE FONCTIONNE
-		//cette méthode définit dans quel sens le sorcier doit bouger
+		//cette mÃ©thode dÃ©finit dans quel sens le sorcier doit bouger
 		//sens = 1 : droite, sens =2 : gauche, sens = 3 : bas, sens = 4 : haut
-		//d'abord il avance sur l'axe x, puis sur l'axe y, puis il se stoppe quand on est à la bonne portée
+		//d'abord il avance sur l'axe x, puis sur l'axe y, puis il se stoppe quand on est Ã  la bonne portÃ©e
 		double r = Math.sqrt(Math.pow(cible.x-this.x, 2)+Math.pow(cible.y-this.y, 2));
 		System.out.println("le r vaut: "+ r);
 		if(this.pas == 1){
@@ -73,11 +78,12 @@ public class Sorcier extends Jouable {
         }else{
             this.pas = 1;
         }
-		if(r<=this.portée) {
+		if(r<=this.portÃ©e) {
 			//le sorcier est capable de tirer, donc il ne bouge plus
 			this.sens = 0;
 			this.pas = 0;
 			this.tir(cible);
+			Bdf.Brain(cible,this);
 		}else if(this.x >= cible.x - 3*UNIT_SIZE && this.x <= cible.x + 3*UNIT_SIZE) {
         	if(cible.y - this.y >0) {
                 this.sens = 3;
@@ -108,7 +114,7 @@ public class Sorcier extends Jouable {
 			this.y = this.y -UNIT_SIZE;
 			//this.sens = 1;
 		}
-		System.out.println("je suis censé avancer");
+		System.out.println("je suis censÃ© avancer");
 		System.out.println("le sens vaut: "+sens);
 		System.out.println(cible.toString());
 	}
@@ -152,6 +158,17 @@ public class Sorcier extends Jouable {
                 g.setColor(Color.blue);
             } else{ g.setColor(Color.red);}
             g.fillRect( this.x+1 ,  this.y-9 , (125*this.pv)/this.pvInit, 8);
+            //bdf 
+            if(this.sens ==0) {
+    			if(cible.pv > 0) {
+    				if(corr == 0) {
+    					Bdf.xBdf = this.x+65;
+    					Bdf.yBdf = this.y+65;
+    					corr++;
+    				}
+    				Bdf.drawBdf(g);
+    			}
+    		}
 
         }
 
@@ -168,7 +185,7 @@ public class Sorcier extends Jouable {
 	}
 	
 	public String toString() {
-		return "je suis un sorcier, mes coordonées : " + this.x +", " +this.y;
+		return "je suis un sorcier, mes coordonÃ©es : " + this.x +", " +this.y;
 	}
 	
 	public void draw_card(Graphics g) {
