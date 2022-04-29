@@ -14,17 +14,17 @@ public abstract class Jouable extends JPanel{
     public int pvInit;
     public int x;
     public int y;
-    public int dégats;
-    public int portée;
+    public int dÃ©gats;
+    public int portÃ©e;
     public boolean tir_aerien;
     public boolean tir_sol;
     public boolean aerien;
     public int freq;
     public int vitesse;
-    public boolean which_player;  //true pour celui avec les commandes à gauche
+    public boolean which_player;  //true pour celui avec les commandes Ã  gauche
     public boolean alive;
-    static final int MAP_WIDTH = 1280;  //variables géométriques
-    static final int CARD_WIDTH = 312;  //pour être en accord avec GamePanel
+    static final int MAP_WIDTH = 1280;  //variables gÃ©omÃ©triques
+    static final int CARD_WIDTH = 312;  //pour Ãªtre en accord avec GamePanel
     static final int UNIT_SIZE = 8;
     Jouable cible;
     int x_card;
@@ -32,8 +32,9 @@ public abstract class Jouable extends JPanel{
     int elixir;
     int temps = 0;
     int pas = 1;
+    public boolean recadre_proj;
 
-    public Jouable(int vie, int VieInit, int x1, int y1, int damage, int p, boolean tir_air, boolean tir_sol, boolean en_air, int fréquence, boolean play) {
+    public Jouable(int vie, int VieInit, int x1, int y1, int damage, int p, boolean tir_air, boolean tir_sol, boolean en_air, int frÃ©quence, boolean play) {
         int coefx = (int) x1/8;
         int coefy = (int) y1/8;
         int x2 = 8*coefx;
@@ -42,38 +43,38 @@ public abstract class Jouable extends JPanel{
         pvInit = VieInit;
         x = x2 + CARD_WIDTH;
         y = y2;
-        dégats = damage;
-        portée = p;
+        dÃ©gats = damage;
+        portÃ©e = p;
         tir_aerien = tir_air;
         this.tir_sol = tir_sol;
         aerien = en_air;
-        freq = fréquence;
+        freq = frÃ©quence;
         which_player = play;
         this.alive = true;
     }
 
-    public void touché(Jouable j1) {
-        this.pv = this.pv - j1.dégats;
+    public void touchÃ©(Jouable j1) {
+        this.pv = this.pv - j1.dÃ©gats;
         this.checkLife();
     }
 
     public void tir(Jouable j1) {
         if(this.alive) {
             if(this.tir_sol && !j1.aerien && this.temps % this.freq ==0) {
-                j1.pv = j1.pv - this.dégats;
+                j1.pv = j1.pv - this.dÃ©gats;
                 j1.checkLife();
             }else if(this.tir_aerien && j1.aerien && this.temps % this.freq ==0){
-                j1.pv = j1.pv - this.dégats;
+                j1.pv = j1.pv - this.dÃ©gats;
                 j1.checkLife();
             }
         }
     }
 
     public abstract void radar(LinkedList<Jouable> list_perso, LinkedList<Jouable> list_tours);
-    //cette méthode indique où est le jouable le plus proche
+    //cette mÃ©thode indique oÃ¹ est le jouable le plus proche
 
     public abstract void brain();
-    //cette méthode indique dans quel sens le perso doit bouger
+    //cette mÃ©thode indique dans quel sens le perso doit bouger
 
     public boolean checkLife() {
         if(this.pv > 0) {
@@ -84,8 +85,8 @@ public abstract class Jouable extends JPanel{
     }
 
     public void draw(Graphics g) {
-        //elle sera en inversé pour la tour :
-        //la tour est déjà dessinée sur la map donc il vaut dessiner sa trace quand elle meurt
+        //elle sera en inversÃ© pour la tour :
+        //la tour est dÃ©jÃ  dessinÃ©e sur la map donc il vaut dessiner sa trace quand elle meurt
     }
 
     public boolean checkLimits() {
